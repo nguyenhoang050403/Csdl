@@ -1,0 +1,311 @@
+create database QUANLIDUANNHANVIEN
+go
+use QUANLIDUANNHANVIEN
+go
+
+create table NhanVien
+(
+	MaNV char(10) primary key,
+	HoNV nvarchar(20),
+	TenLot nvarchar(20),
+	TenNV nvarchar(30),
+	NgSinh datetime,
+	DChi nvarchar(100),
+	Phai char(3),
+	Luong float,
+	Ma_NQL char(10),
+	MaPhong char(10),
+	foreign key(Ma_NQL) references NhanVien(MaNV),
+	  
+)
+go
+create table PhongBan
+(
+	MaPhong char(10) primary key,
+	TenPhong nvarchar(50),
+	MaTrPhong char(10),
+	Ng_NhanChuc datetime default(current_timestamp)
+	foreign key(MaTrPhong) references NhanVien(MaNV),
+)
+go
+
+create table DiaDiemPhong
+(
+	MaPhong char(10) not null,
+	DiaDiem nvarchar(100),
+	foreign key (MaPhong) references PhongBan(MaPhong),
+	primary key(MaPhong, DiaDiem)
+)
+go
+create table DeAn
+(
+	MaDA char(10) primary key,
+	TenDA nvarchar(100),
+	DDiem_DA nvarchar(100),
+	MaPhong char(10),
+	foreign key(MaPhong) references PhongBan(MaPhong)
+)
+go
+create table PhanCong
+(
+	MaNV char(10) not null,
+	MaDA char(10) not null,
+	ThoiGian float,
+	foreign key(MaNV) references NhanVien(MaNV),
+	foreign key(MaDA) references DeAn(MaDA),
+	primary key(MaNV, MaDA)
+)
+go
+create table ThanNhan
+(
+	MaNV char(10) not null,
+	TenTN nvarchar(100) not null,
+	Phai char(30),
+	NgSinh datetime,
+	QuanHe nvarchar(50),
+	foreign key(MaNV) references NhanVien(MaNV),
+	primary key(MaNV, TenTN)
+)
+go
+
+alter table NhanVien
+add constraint MP_FK foreign key(MaPhong) references PhongBan(MaPhong)
+go
+
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Vuong', 'Ngoc', 'Quyen', '888665555', '1927-10-10', '450 Trung Vuong, Ha Noi', 'Nu', 55000, NULL, NULL)
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Nguyen', 'Thanh', 'Tung', '333445555', '1945-12-08', '638 Nguyen Van Cu, Q5, TPHCM', 'Nam', 40000, '888665555', NULL)
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Dinh', 'Ba', 'Tien', '123456789', '1955-01-09', '731 Tran Hung Dao, Q1, TPHCM', 'Nam', 30000, '333445555', NULL)
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Le', 'Thi', 'Nhan', '987654321', '1931-06-20', '291 Ho Van Hue, QPN, TPHCM', 'Nu', 43000, '888665555', NULL)
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Bui', 'Thuy', 'Vu', '999887777', '1958-07-19', '332 Nguyen Thai Hoc, Q1, TPHCM', 'Nam', 25000, '987654321', NULL)
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Nguyen', 'Manh', 'Hung', '666884444', '1952-09-15', '975 Ba Ria, Vung Tau', 'Nam', 38000, '333445555', NULL)
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Tran', 'Thanh', 'Tam', '453453453', '1962-07-31', '543 Mai Thi Luu, Q1, TPHCM', 'Nam', 25000, '333445555', NULL)
+insert into NhanVien(HoNV, TenLot, TenNV, MaNV, NgSinh, DChi, Phai, Luong, Ma_NQL, MaPhong)
+values('Tran', 'Hong', 'Quang', '987987987', '1959-03-29', '980 Le Hong Phong, Q10, TPHCM', 'Nam', 25000, '987654321', NULL)
+ 
+insert into PhongBan(TenPhong, MaPhong, MaTrPhong, Ng_NhanChuc)
+values('Nghien cuu', '5', '333445555', '1978-05-22')
+insert into PhongBan(TenPhong, MaPhong, MaTrPhong, Ng_NhanChuc)
+values('Dieu hanh', '4', '987987987', '1985-01-01')
+insert into PhongBan(TenPhong, MaPhong, MaTrPhong, Ng_NhanChuc)
+values('Quan ly', '1', '888665555', '1971-06-19')
+ 
+update NhanVien
+set MaPhong = '5'
+where MaNV in ('123456789', '333445555', '666884444', '453453453')
+ 
+update NhanVien
+set MaPhong = '4'
+where MaNV in ('999887777', '987654321', '987987987')
+ 
+update NhanVien
+set MaPhong = '1'
+where MaNV like '888665555'
+ 
+insert into DiaDiemPhong(MaPhong, DiaDiem)
+values(1, 'TP HCM')
+insert into DiaDiemPhong(MaPhong, DiaDiem)
+values(4, 'HA NOI')
+insert into DiaDiemPhong(MaPhong, DiaDiem)
+values(5, 'VUNG TAU')
+insert into DiaDiemPhong(MaPhong, DiaDiem)
+values(5, 'NHA TRANG')
+insert into DiaDiemPhong(MaPhong, DiaDiem)
+values(5, 'TP HCM')
+ 
+ 
+insert into ThanNhan(MaNV, TenTN, Phai, NgSinh, QuanHe)
+values('333445555', 'Quang', 'Nu', '1976-04-05', 'Con gai')
+insert into ThanNhan(MaNV, TenTN, Phai, NgSinh, QuanHe)
+values('333445555', 'Khang', 'Nam', '1973-10-25', 'Con trai')
+insert into ThanNhan(MaNV, TenTN, Phai, NgSinh, QuanHe)
+values('333445555', 'Duong', 'Nu', '1948-05-03', 'Vo chong')
+insert into ThanNhan(MaNV, TenTN, Phai, NgSinh, QuanHe)
+values('987654321', 'Dang', 'Nam', '1932-02-29', 'Vo chong')
+insert into ThanNhan(MaNV, TenTN, Phai, NgSinh, QuanHe)
+values('123456789', 'Duy', 'Nam', '1978-01-01', 'Con trai')
+insert into ThanNhan(MaNV, TenTN, Phai, NgSinh, QuanHe)
+values('333445555', 'Chau', 'Nu', '1978-12-31', 'Con gai')
+insert into ThanNhan(MaNV, TenTN, Phai, NgSinh, QuanHe)
+values('333445555', 'Phuong', 'Nu', '1957-05-05', 'Vo chong')
+ 
+insert into DeAn(TenDA, MaDA, DDiem_DA, MaPhong)
+values('San Pham X', '1', 'VUNG TAU', '5')
+insert into DeAn(TenDA, MaDA, DDiem_DA, MaPhong)
+values('San Pham Y', '2', 'NHA TRANG', '5')
+insert into DeAn(TenDA, MaDA, DDiem_DA, MaPhong)
+values('San Pham Z', '3', 'TP HCM', '5')
+insert into DeAn(TenDA, MaDA, DDiem_DA, MaPhong)
+values('Tin hoc hoa', '10', 'HA NOI', '4')
+insert into DeAn(TenDA, MaDA, DDiem_DA, MaPhong)
+values('Cap quang', '20', 'TP HCM', '1')
+insert into DeAn(TenDA, MaDA, DDiem_DA, MaPhong)
+values('Dao tao', '30', 'HA NOI', '4')
+ 
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('123456789', '1', 32.5)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('123456789', '2', 7.5)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('666884444', '3', 40.5)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('453453453', '1', 20.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('453453453', '2', 20.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('333445555', '3', 10.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('333445555', '10', 10.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('333445555', '20', 10.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('999887777', '30', 30.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('999887777', '10', 10.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('987987987', '10', 35.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('987987987', '30', 5.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('987654321', '30', 20.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('987654321', '20', 15.0)
+insert into PhanCong(MaNV, MaDA, ThoiGian)
+values('888665555', '20', NULL)
+
+alter table NhanVien
+add Quequan nvarchar(100)
+
+update NhanVien
+set quequan = N'Cần Thơ'
+where MaNV like '123456789'
+
+
+alter table NhanVien
+add TinhTrangGD nvarchar(50)
+
+alter table NhanVien
+alter column TinhTrangGD int
+
+alter table NhanVien
+add hsl float
+
+alter table NhanVien
+drop column hsl
+
+drop database QUANLIDUANNHANVIEN
+
+select MaNV, TenNV
+from NhanVien
+where MaPhong like '4' and Phai like 'Nam'
+
+select MaNV, (HoNV + ' ' +TenLot +' ' + TenNV) as 'HoVaTen'
+from NhanVien
+where MaPhong = 1 or Phai = 'Nu'
+
+
+select MaNV, TenNV, year(CURRENT_TIMESTAMP) - year(NgSinh) as 'Tuoi'
+from NhanVien
+where  year(CURRENT_TIMESTAMP) - year(NgSinh) between 40 and 60
+
+select MaNV,TenNV
+from NhanVien
+where TenNV like '%g'
+
+
+select *
+from 
+(
+select MaNV, (HoNV +' ' +TenLot+' ' +TenNV) as 'HoVaTen'
+from NhanVien
+)as temp
+where lower (HoVaTen) like '%thanh%'
+
+select MaNV, (HoNV +' ' +TenLot+' ' +TenNV) as 'HoVaTen'
+from NhanVien
+where MaNV like  '9_%'
+
+select MaNV, concat(HoNV ,' ' ,TenLot,' ' ,TenNV) as 'HoVaTen'
+from NhanVien
+where MaNV like'_[8,9]%'
+
+select MaNV, concat(HoNV ,' ' ,TenLot,' ' ,TenNV) as 'HoVaTen'
+from NhanVien
+where MaNV like '[^9]%'
+
+select *
+from NhanVien,PhongBan
+where NhanVien.MaPhong=PhongBan.MaPhong
+
+select MaNV, concat(HoNV,' ',TenLot,' ',TenNV)as 'HoVaTen',Phai,pb.MaPhong,TenPhong
+from NhanVien nv,PhongBan pb
+where nv.MaPhong=pb.MaPhong and pb.MaPhong like '5' and concat(HoNV,' ',TenLot,' ',TenNV)like 't%' and year(getdate())-year(NgSinh)>50
+
+select MaNV,TenNV,Quequan,pb.TenPhong
+from NhanVien nv , PhongBan pb
+where nv.MaPhong=pb.MaPhong and Quequan is null
+
+
+select MaNV,TenNV,Quequan,pb.TenPhong
+from NhanVien nv , PhongBan pb
+where nv.MaPhong=pb.MaPhong and (pb.TenPhong like'Quan ly' or  pb.TenPhong like 'Dieu hanh')
+
+select MaNV,TenNV,Quequan,pb.TenPhong,year(getdate())-year(NgSinh) as 'Tuoi'
+from NhanVien nv , PhongBan pb
+where nv.MaPhong=pb.MaPhong and (pb.TenPhong not like'Quan ly' and  pb.TenPhong not like 'Dieu hanh')
+order by year(getdate())-year(NgSinh) asc
+
+select MaNV,TenNV,Quequan,pb.TenPhong,NgSinh,year(getdate())-year(NgSinh) as 'Tuoi'
+from NhanVien nv , PhongBan pb
+where nv.MaPhong=pb.MaPhong and year(getdate())-year(NgSinh) =
+(
+select max(year(getdate())-year(NgSinh))
+from NhanVien nv
+)
+
+select MaNV,TenNV,Quequan,year(getdate())-year(NgSinh) as 'Tuoi',TenPhong
+from NhanVien nv , PhongBan pb
+where nv.MaPhong=pb.MaPhong and pb.TenPhong in ('Quan ly','Dieu hanh')
+order by year(getdate())-year(NgSinh), pb.MaPhong desc
+
+
+select Phai, count(MaNV) as soluongnv
+from NhanVien nv, PhongBan pb
+where nv.MaPhong=pb.MaPhong
+group by Phai
+
+select TenPhong, count(MaNV) as soluongnv
+from NhanVien nv, PhongBan pb
+where nv.MaPhong=pb.MaPhong
+group by TenPhong
+
+select TenPhong, count(MaNV) as soluongnv
+from NhanVien nv, PhongBan pb
+where nv.MaPhong=pb.MaPhong
+group by TenPhong 
+having count(MaNV) >=3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
