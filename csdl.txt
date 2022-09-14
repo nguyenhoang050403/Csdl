@@ -387,6 +387,37 @@ select nv.MaNV, nv.TenNV, nv.Phai, nv.NgSinh,(select TenPhong from PhongBan as p
 from NhanVien as nv
 
 
+--viet ham trong sql
+-- tinh tuoi dua vao nam sinh 
+create function tinhtuoi(@ngaysinh date)
+returns int
+as
+begin 
+declare @result int
+set @result=year (getdate())- year(@ngaysinh)+1;
+    return @result
+end
+go
+select MaNV,TenNV,Phai,dbo.tinhtuoi(NgSinh) as 'Tuoi' 
+from NhanVien
+go
+create function Maxage()
+returns int
+as
+begin
+     declare @result int
+	 select top 1 @result =dbo.tinhtuoi(NgSinh)
+	 from NhanVien
+	 order by dbo.tinhtuoi(NgSinh) desc
+	 return @result
+end
+go 
+
+select TenNV,MaNV,Phai,NgSinh,dbo.tinhtuoi(NgSinh) as 'Tuoi'
+from NhanVien
+where dbo.tinhtuoi(NgSinh) = dbo.Maxage() 
+
+
 
 
 
