@@ -382,6 +382,11 @@ pivot
 ( avg(temp.ThoiGian) for temp.MaDA in ([1],[2],[3],[10],[20],[30]))
 as pivotTable
 
+-- liet ke tat ca cac nhan vien gom co ....
+select nv.MaNV, nv.TenNV, nv.Phai, nv.NgSinh,(select TenPhong from PhongBan as pb where pb.MaPhong=nv.MaPhong) as TenPhong 
+from NhanVien as nv
+
+
 
 
 
