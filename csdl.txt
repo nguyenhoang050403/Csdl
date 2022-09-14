@@ -291,6 +291,98 @@ where nv.MaPhong=pb.MaPhong
 group by TenPhong 
 having count(MaNV) >=3
 
+select MaNv,TenNV,Phai,NgSinh, TenPhong
+from NhanVien nv
+join PhongBan pb on pb.MaPhong=nv.MaPhong
+where MaNV in(
+select MaNV
+from NhanVien 
+
+intersect
+
+select MaNV
+from PhanCong )
+
+select distinct nv.MaNV,nv.TenNV,nv.Phai, nv.NgSinh,pb.TenPhong
+from PhongBan pb, NhanVien nv, PhanCong pc
+where pb.MaPhong=nv.MaPhong and pc.MaNV=nv.MaNV 
+
+
+select nv.MaNV, nv.TenNV, nv.Phai ,nv.NgSinh, pb.TenPhong
+from NhanVien nv,  PhongBan pb
+where pb.MaPhong=nv.MaPhong 
+and nv.MaNv in ( 
+select MaNV
+from NhanVien
+except 
+select MaNV
+from PhanCong)
+
+
+select  nv.MaNV, nv.TenNV, nv.Phai ,nv.NgSinh, pb.TenPhong
+from NhanVien nv,  PhongBan pb
+where pb.MaPhong=nv.MaPhong 
+and nv.MaNv in ( 
+select MaNV
+from NhanVien
+where nv.MaPhong='1'
+union 
+select MaNV
+from NhanVien
+where nv.MaPhong='4' )
+
+
+select nv.MaNV, nv.TenNV, nv.Phai ,nv.NgSinh, pb.TenPhong
+from NhanVien nv,  PhongBan pb
+where pb.MaPhong=nv.MaPhong and (pb.TenPhong like 'Quan%' or pb.TenPhong like 'Dieu%')
+
+
+
+
+select distinct nv.MaNV,nv.TenNV,nv.Phai,nv.NgSinh,pb.TenPhong,pc.MaDA
+from PhongBan as pb inner join
+NhanVien as nv on pb.MaPhong=nv.MaPhong left outer join
+PhanCong as pc on  nv.MaNV=pc.MaNV
+
+
+select MaNV, TenNV,Phai,NgSinh, pb.TenPhong
+from NhanVien as nv full outer join
+PhongBan as pb on pb.MaPhong=nv.MaPhong
+
+select  MaNV,TenNV,NGsinh, Phai
+from NhanVien nv
+where nv.MaNV in(
+SELECT DISTINCT TG1.MaNV FROM phancong TG1 
+WHERE not EXISTS (
+                  ( SELECT MaDA FROM DeAn) 
+                    EXCEPT
+                    ( SELECT MaDA
+                    FROM phancong TG2
+                    WHERE TG2.MaNV = TG1.MaNV ) ))
+
+--pivot
+
+
+select MaNV, [1],[2],[3],[10],[20],[30]
+from (select MaNV, da.MaDA
+      from PhanCong as pc 
+	  inner join DeAn as da on da.MaDA=pc.MaDA
+	  ) as temp
+pivot
+( count(temp.MaDA) for temp.MaDA in ([1],[2],[3],[10],[20],[30]))
+as pivotTable
+
+
+select MaNV, [1],[2],[3],[10],[20],[30]
+from (select MaNV, da.MaDA,pc.ThoiGian
+      from PhanCong as pc 
+	  inner join DeAn as da on da.MaDA=pc.MaDA
+	  ) as temp
+pivot
+( avg(temp.ThoiGian) for temp.MaDA in ([1],[2],[3],[10],[20],[30]))
+as pivotTable
+
+
 
 
 
