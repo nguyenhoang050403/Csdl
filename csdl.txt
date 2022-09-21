@@ -432,6 +432,24 @@ select distinct nv.MaNV,TenNV,cast(day(nv.NgSinh) as nvarchar(2))+'-'+cast(month
 from NhanVien nv, PhanCong pc
 where nv.MaNV=pc.MaNV
 
+--tinh luong lam du an cua cac nhan vien tham gia du an
+--biet rang luongduan=sogio*120000 d
+--thong tin hien thi gom co manv,tennv,phai,ngsinh, luongduan
+go
+create function dbo.calSalary(@sogio float)
+returns float 
+as
+begin
+     return @sogio*120000 ;
+end;
+go
+
+select distinct nv.MaNV,TenNV,Phai,Ngsinh,sum(dbo.calSalary(pc.ThoiGian)) as 'luong du an'
+from NhanVien nv, PhanCong pc
+where nv.MaNV=pc.MaNV
+group by nv.MaNV,nv.TenNV,Phai,nv.NgSinh
+
+
 
 
 
