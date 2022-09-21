@@ -496,6 +496,34 @@ select*from DeAn
 
 
 
+--trùng khóa chính
+--cải tiến thủ tục kiểm tra khóa ngoại và sự trùng lặp của khóa chính
+go
+create procedure insertDeAnCheckMapandPK(@MaDA char(10),@TenDA nvarchar(50), @DDiem_DA nvarchar(20),@MaPhong char (10))
+as 
+begin 
+  if(not exists(select MaPhong from PhongBan where MaPhong=@MaPhong))
+  begin
+	print N'Mã Phòng'+ ' ' + @MaPhong+N' không tồn tại trong bảng PhongBan'
+  end
+  else
+  begin
+	if(not exists (select MaDA from DeAn where MaDA=@MaDA))
+	begin
+ 
+	insert into DeAn(MaDA,TenDA,DDiem_DA,MaPhong) 
+	values (@MaDA,@TenDA,@DDiem_DA,@MaPhong)
+	end
+	else
+	begin
+		print N'Mã Dự Án'+ ' ' + @MaDA+N' mã có rồi trong bảng đề án'
+	end
+  end
+end
+exec insertDeAnCheckMapandPK '41',N'Smart City NewDeLi',N'Ấn Độ','5'
+select*from DeAn
+
+
 
 
 
