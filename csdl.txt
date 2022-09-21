@@ -523,6 +523,28 @@ end
 exec insertDeAnCheckMapandPK '41',N'Smart City NewDeLi',N'Ấn Độ','5'
 select*from DeAn
 
+--cập nhật tên đề tài với mã số dự án cũ , tên đề án mới 
+go
+create procedure updateDeAn(@MaDA char(10),@TenDA nvarchar(50))
+as 
+begin
+	if exists(select MaDA from DeAn where MaDA=@MaDA)
+	begin
+		update DeAn
+		set TenDA=@TenDA
+		where MaDA=@MaDA
+		print N' cập nhật thành công'
+	end
+	else
+	begin	 
+  
+		print N' mã đề án không tồn tại cập nhật thất bại'
+    end
+end
+
+exec updateDeAn'48',N'Smart City HCM'
+     
+
 
 
 
