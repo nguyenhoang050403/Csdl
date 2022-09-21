@@ -543,6 +543,32 @@ begin
 end
 
 exec updateDeAn'48',N'Smart City HCM'
+
+--xóa kiểm tra ràng buộc khóa
+
+-- xóa 1 đề án ,nếu đề án đã có tồn tại thì không xóa
+
+go
+alter procedure XoaDeAn(@MaDA char(10))
+as 
+begin
+	if not exists(select MaDA from PhanCong where MaDA=@MaDA)
+	begin
+		delete from DeAn
+		
+		where MaDA=@MaDA
+		print N'  Xóa thành công'
+	end
+	else
+	begin	 
+  
+		print N' xóa thất bại'+rtrim(@MaDA) +N'đã tồn tại trong bảng phân công'
+    end
+end
+
+exec XoaDeAn'41'
+
+select * from DeAn 
      
 
 
