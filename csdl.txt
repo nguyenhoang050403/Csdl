@@ -463,7 +463,14 @@ select *
 from dbo.tableAge(60);
 
 
-
+create function dbo.tableRangeAge(@tuoi1 int, @tuoi2 int)
+returns table
+as 
+return (select MaNV,TenNV,Phai,(year(getdate())-year(NgSinh)) as tuoi
+       from NhanVien
+	   where (year(getdate())-year(NgSinh))between @tuoi1 and @tuoi2)
+select*
+from dbo.tableRangeAge(50,70);      
 
 
 
