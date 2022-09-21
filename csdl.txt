@@ -570,6 +570,30 @@ exec XoaDeAn'41'
 
 select * from DeAn 
      
+-- giải phương trình bậc 1 ax+b=0
+go
+create procedure B1(@a float,@b float)
+as
+begin
+	if (@a=0 and @b =0)
+	begin
+		print N'PTB1VSN'
+	end
+	if (@a=0 and @b<>0)
+	begin 
+		print N'PTB1VN'
+	end
+	if (@a<>0)
+	begin
+		declare @x float;
+		set @x=-@b/@a
+		print N'x='+cast(@x as nvarchar (10))
+	end
+		  
+
+end
+
+exec B1 '2','8'
 
 
 
