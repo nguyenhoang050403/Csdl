@@ -449,6 +449,19 @@ from NhanVien nv, PhanCong pc
 where nv.MaNV=pc.MaNV
 group by nv.MaNV,nv.TenNV,Phai,nv.NgSinh
 
+--ham dang bang
+go
+create function dbo.tableAge(@tuoi int)
+returns table
+as 
+return (select MaNV,TenNV,Phai,(year(getdate())-year(NgSinh)) as tuoi
+       from NhanVien
+	   where (year(getdate())-year(NgSinh))=@tuoi)
+go 
+--cho biet nhan vien co tuoi 60
+select *
+from dbo.tableAge(60);
+
 
 
 
