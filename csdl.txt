@@ -416,6 +416,23 @@ go
 select TenNV,MaNV,Phai,NgSinh,dbo.tinhtuoi(NgSinh) as 'Tuoi'
 from NhanVien
 where dbo.tinhtuoi(NgSinh) = dbo.Maxage() 
+go
+create function dbo.calSumHour(@MaNV char(10))
+returns float
+as
+begin
+    return (select sum(ThoiGian) from PhanCong where MaNV=(@MaNV))
+end
+go
+select distinct nv.MaNV,TenNV,dbo.calSumHour(pc.MaNV)as 'Tong so gio'
+from NhanVien nv, PhanCong pc
+where nv.MaNV=pc.MaNV	
+
+select distinct nv.MaNV,TenNV,cast(day(nv.NgSinh) as nvarchar(2))+'-'+cast(month(nv.NgSinh)as nvarchar(2))+'-'+cast(year(nv.NgSinh) as nvarchar(4)) as 'Ngay Sinh',dbo.calSumHour(pc.MaNV)as 'Tong so gio'
+from NhanVien nv, PhanCong pc
+where nv.MaNV=pc.MaNV
+
+
 
 
 
