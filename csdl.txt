@@ -470,7 +470,29 @@ return (select MaNV,TenNV,Phai,(year(getdate())-year(NgSinh)) as tuoi
        from NhanVien
 	   where (year(getdate())-year(NgSinh))between @tuoi1 and @tuoi2)
 select*
-from dbo.tableRangeAge(50,70);      
+from dbo.tableRangeAge(50,70);
+
+--stored proceduce 
+
+sp_Databases
+ 
+sp_stored_procedures
+
+--tao thu tuc them du lieu vao bang du an
+go
+
+
+go
+create procedure insertDeAn(@MaDA char(10),@TenDA nvarchar(50), @DDiem_DA nvarchar(20),@MaPhong char (10))
+as 
+begin 
+insert into DeAn(MaDA,TenDA,DDiem_DA,MaPhong) 
+values (@MaDA,@TenDA,@DDiem_DA,@MaPhong)
+end
+go
+-- goi thu tuc
+exec insertDeAn '40',N'Smart City',N'Vung Tau','5'
+select*from DeAn
 
 
 
