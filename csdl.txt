@@ -595,6 +595,16 @@ end
 
 exec B1 '2','8'
 
+-Phân quyền
+--master
+--b1
+create login ds01 with password ='1'
+--b2  tạo user cho login (trong database QUANLIDUANNHANVIEN)
+create user nhuhon for login ds01
+
+--b3 gán quyền
+grant select on PhongBan  to nhuhon
+
 
 
 
